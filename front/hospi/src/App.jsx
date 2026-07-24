@@ -180,14 +180,38 @@ function summarizeRecord(record) {
   }
 }
 
-async function requestApi(path, options = {}) {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
+const wait = (ms) => new Promise((resolve) => {
+  window.setTimeout(resolve, ms)
+})
+
+async function fetchApi(path, options = {}) {
+  const headers = {
+    ...options.headers,
+  }
+
+  if (options.body && !headers['Content-Type']) {
+    headers['Content-Type'] = 'application/json'
+  }
+
+  return fetch(`${API_BASE_URL}${path}`, {
     ...options,
+    headers,
   })
+}
+
+async function requestApi(path, options = {}) {
+  let response
+
+  try {
+    response = await fetchApi(path, options)
+  } catch (error) {
+    await wait(900)
+    try {
+      response = await fetchApi(path, options)
+    } catch {
+      throw new Error(`เชื่อมต่อ API ไม่ได้ (${error.message})`)
+    }
+  }
 
   if (!response.ok) {
     let message = 'ไม่สามารถเชื่อมต่อ API ได้'
