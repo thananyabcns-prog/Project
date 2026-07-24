@@ -180,26 +180,6 @@ function summarizeRecord(record) {
   }
 }
 
-function syncFormControls(sourceElement, targetElement) {
-  const sourceControls = sourceElement.querySelectorAll('input, textarea, select')
-  const targetControls = targetElement.querySelectorAll('input, textarea, select')
-
-  sourceControls.forEach((sourceControl, index) => {
-    const targetControl = targetControls[index]
-
-    if (!targetControl) {
-      return
-    }
-
-    if (sourceControl.type === 'checkbox' || sourceControl.type === 'radio') {
-      targetControl.checked = sourceControl.checked
-      return
-    }
-
-    targetControl.value = sourceControl.value
-  })
-}
-
 async function requestApi(path, options = {}) {
   const response = await fetch(`${API_BASE_URL}${path}`, {
     headers: {
@@ -688,7 +668,6 @@ function App() {
   const [recordsError, setRecordsError] = useState('')
   const [isLoadingRecords, setIsLoadingRecords] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
-  const [isDownloadingPdf, setIsDownloadingPdf] = useState(false)
 
   const checkedCount = useMemo(() => {
     return Object.values(checks).filter(Boolean).length
@@ -757,58 +736,6 @@ function App() {
 
   function printForm() {
     window.print()
-  }
-
-  async function downloadPdf() {
-    const sourceElement = document.getElementById('or-checklist-form')
-
-    if (!sourceElement) {
-      return
-    }
-
-    const filenameParts = ['Pre-OR Checklist', form.patientName, form.hn].filter(Boolean)
-    const filename = `${filenameParts.join(' - ').replace(/[\\/:*?"<>|]/g, '').trim() || 'Pre-OR Checklist'}.pdf`
-    const exportHost = document.createElement('div')
-    const exportElement = sourceElement.cloneNode(true)
-
-    exportElement.classList.add('pdf-print-sheet')
-    syncFormControls(sourceElement, exportElement)
-    setIsDownloadingPdf(true)
-    document.body.classList.add('pdf-exporting')
-    exportHost.className = 'pdf-export-host'
-    exportHost.appendChild(exportElement)
-    document.body.appendChild(exportHost)
-
-    try {
-      const { default: html2pdf } = await import('html2pdf.js')
-
-      await html2pdf()
-        .set({
-          filename,
-          margin: [5, 5, 5, 5],
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: {
-            backgroundColor: '#ffffff',
-            scale: 2,
-            scrollX: 0,
-            scrollY: 0,
-            useCORS: true,
-            windowWidth: 760,
-          },
-          jsPDF: {
-            format: 'a4',
-            orientation: 'portrait',
-            unit: 'mm',
-          },
-          pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
-        })
-        .from(exportElement)
-        .save()
-    } finally {
-      exportHost.remove()
-      document.body.classList.remove('pdf-exporting')
-      setIsDownloadingPdf(false)
-    }
   }
 
   async function saveCurrentRecord() {
@@ -946,9 +873,6 @@ function App() {
                 </button>
                 <button type="button" className="secondary-button" onClick={saveCurrentRecord} disabled={isSaving}>
                   {isSaving ? 'กำลังบันทึก...' : 'บันทึกข้อมูล'}
-                </button>
-                <button type="button" className="secondary-button" onClick={downloadPdf} disabled={isDownloadingPdf}>
-                  {isDownloadingPdf ? 'กำลังสร้าง PDF...' : 'Download PDF'}
                 </button>
                 <button type="button" className="primary-button" onClick={printForm}>
                   พิมพ์
@@ -1242,9 +1166,6 @@ function App() {
                 </button>
                 <button type="button" className="secondary-button" onClick={saveCurrentRecord} disabled={isSaving}>
                   {isSaving ? 'กำลังบันทึก...' : 'บันทึกข้อมูล'}
-                </button>
-                <button type="button" className="secondary-button" onClick={downloadPdf} disabled={isDownloadingPdf}>
-                  {isDownloadingPdf ? 'กำลังสร้าง PDF...' : 'Download PDF'}
                 </button>
                 <button type="button" className="primary-button" onClick={printForm}>
                   พิมพ์
