@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'
+const PHONE_MODE_ENABLED = false
 
 const initialForm = {
   date: '',
@@ -250,6 +251,10 @@ function detectPhoneLayout() {
 }
 
 function getInitialDeviceMode() {
+  if (!PHONE_MODE_ENABLED) {
+    return 'desktop'
+  }
+
   if (typeof window === 'undefined') {
     return 'welcome'
   }
@@ -276,11 +281,13 @@ function WelcomeView({ onChoose, recommendedMode }) {
         </div>
 
         <div className="mode-cards">
-          <button type="button" className="mode-card primary-mode" onClick={() => onChoose('phone')}>
-            <span>{recommendedMode === 'phone' ? 'แนะนำสำหรับเครื่องนี้' : 'โหมดโทรศัพท์'}</span>
-            <strong>กรอกบนโทรศัพท์</strong>
-            <small>หน้าฟอร์มแยกสำหรับจอเล็ก เรียงทีละหมวด กดง่าย อ่านง่าย และยังพิมพ์เป็น A4 ได้เหมือนเดิม</small>
-          </button>
+          {PHONE_MODE_ENABLED && (
+            <button type="button" className="mode-card primary-mode" onClick={() => onChoose('phone')}>
+              <span>{recommendedMode === 'phone' ? 'แนะนำสำหรับเครื่องนี้' : 'โหมดโทรศัพท์'}</span>
+              <strong>กรอกบนโทรศัพท์</strong>
+              <small>หน้าฟอร์มแยกสำหรับจอเล็ก เรียงทีละหมวด กดง่าย อ่านง่าย และยังพิมพ์เป็น A4 ได้เหมือนเดิม</small>
+            </button>
+          )}
           <button type="button" className="mode-card" onClick={() => onChoose('desktop')}>
             <span>{recommendedMode === 'desktop' ? 'แนะนำสำหรับเครื่องนี้' : 'โหมดคอมพิวเตอร์'}</span>
             <strong>กรอกแบบกระดาษ A4</strong>
@@ -685,6 +692,10 @@ function App() {
   const recommendedMode = useMemo(() => (detectPhoneLayout() ? 'phone' : 'desktop'), [])
 
   function chooseDeviceMode(nextMode) {
+    if (!PHONE_MODE_ENABLED && nextMode === 'phone') {
+      return
+    }
+
     setDeviceMode(nextMode)
     window.localStorage.setItem('hos-device-mode', nextMode)
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -812,17 +823,19 @@ function App() {
           </button>
         </nav>
 
-        <div className="mode-switch">
-          <p>โหมดการใช้งาน</p>
-          <div>
-            <button type="button" className={deviceMode === 'phone' ? 'active' : ''} onClick={() => chooseDeviceMode('phone')}>
-              โทรศัพท์
-            </button>
-            <button type="button" className={deviceMode === 'desktop' ? 'active' : ''} onClick={() => chooseDeviceMode('desktop')}>
-              คอม
-            </button>
+        {PHONE_MODE_ENABLED && (
+          <div className="mode-switch">
+            <p>โหมดการใช้งาน</p>
+            <div>
+              <button type="button" className={deviceMode === 'phone' ? 'active' : ''} onClick={() => chooseDeviceMode('phone')}>
+                โทรศัพท์
+              </button>
+              <button type="button" className={deviceMode === 'desktop' ? 'active' : ''} onClick={() => chooseDeviceMode('desktop')}>
+                คอม
+              </button>
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="status-box">
           <p>ข้อมูลหลัก</p>
@@ -850,9 +863,11 @@ function App() {
               </button>
             ) : (
               <>
-                <button type="button" className="secondary-button mode-toggle" onClick={() => chooseDeviceMode(deviceMode === 'phone' ? 'desktop' : 'phone')}>
-                  {deviceMode === 'phone' ? 'โหมดคอม' : 'โหมดโทรศัพท์'}
-                </button>
+                {PHONE_MODE_ENABLED && (
+                  <button type="button" className="secondary-button mode-toggle" onClick={() => chooseDeviceMode(deviceMode === 'phone' ? 'desktop' : 'phone')}>
+                    {deviceMode === 'phone' ? 'โหมดคอม' : 'โหมดโทรศัพท์'}
+                  </button>
+                )}
                 <button type="button" className="secondary-button" onClick={resetForm}>
                   ล้างฟอร์ม
                 </button>
@@ -881,7 +896,7 @@ function App() {
           />
         ) : (
           <>
-          {deviceMode === 'phone' && (
+          {PHONE_MODE_ENABLED && deviceMode === 'phone' && (
             <MobileChecklist
               form={form}
               checks={checks}
@@ -1141,9 +1156,11 @@ function App() {
             </footer>
             {mode === 'form' && (
               <footer className="form-footer no-print">
-                <button type="button" className="secondary-button mode-toggle" onClick={() => chooseDeviceMode(deviceMode === 'phone' ? 'desktop' : 'phone')}>
-                  {deviceMode === 'phone' ? 'โหมดคอม' : 'โหมดโทรศัพท์'}
-                </button>
+                {PHONE_MODE_ENABLED && (
+                  <button type="button" className="secondary-button mode-toggle" onClick={() => chooseDeviceMode(deviceMode === 'phone' ? 'desktop' : 'phone')}>
+                    {deviceMode === 'phone' ? 'โหมดคอม' : 'โหมดโทรศัพท์'}
+                  </button>
+                )}
                 <button type="button" className="secondary-button" onClick={resetForm}>
                   ล้างฟอร์ม
                 </button>
