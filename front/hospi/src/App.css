@@ -791,8 +791,6 @@ button:disabled {
 }
 
 .form-footer {
-  position: sticky;
-  bottom: 0;
   justify-content: flex-end;
   padding: 12px;
   border: 1px solid var(--border);
@@ -1043,13 +1041,13 @@ button:disabled {
   top: 0;
   left: -12000px;
   z-index: -1;
-  width: 1060px;
+  width: 760px;
   background: #ffffff;
   pointer-events: none;
 }
 
 .pdf-export-host .paper-sheet {
-  width: 1060px !important;
+  width: 760px !important;
   max-width: none !important;
   margin: 0 !important;
   box-shadow: none !important;
@@ -1057,6 +1055,293 @@ button:disabled {
 
 .pdf-export-host .no-print {
   display: none !important;
+}
+
+.pdf-print-sheet {
+  border-color: #000000 !important;
+  box-shadow: none !important;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.pdf-print-sheet.checklist-form {
+  display: grid !important;
+  gap: 6px !important;
+  padding: 4px !important;
+}
+
+.pdf-print-sheet .paper-header {
+  grid-template-columns: minmax(0, 1fr) 210px;
+  gap: 8px;
+}
+
+.pdf-print-sheet .paper-header h1 {
+  font-size: 23.5px;
+  font-weight: 700;
+}
+
+.pdf-print-sheet .paper-header p {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.pdf-print-sheet .header-fields {
+  gap: 3px;
+  padding: 5px;
+}
+
+.pdf-print-sheet .patient-info {
+  gap: 4px;
+  padding: 7px 10px 6px;
+}
+
+.pdf-print-sheet .patient-row {
+  gap: 9px;
+}
+
+.pdf-print-sheet .patient-top-row {
+  grid-template-columns: minmax(300px, 1fr) 132px 166px;
+  gap: 12px;
+}
+
+.pdf-print-sheet .patient-code-row {
+  grid-template-columns: minmax(155px, 0.8fr) minmax(155px, 0.8fr) minmax(130px, 0.65fr) minmax(130px, 0.65fr);
+  gap: 12px;
+}
+
+.pdf-print-sheet .doctor-row {
+  grid-template-columns: minmax(230px, 1fr) minmax(230px, 1fr);
+  gap: 18px;
+}
+
+.pdf-print-sheet .patient-info .line-field,
+.pdf-print-sheet .patient-info .check-item {
+  font-size: 10.5px;
+  font-weight: 500;
+  line-height: 1.08;
+}
+
+.pdf-print-sheet .patient-info .line-field {
+  gap: 5px;
+}
+
+.pdf-print-sheet .patient-info .field-age {
+  grid-template-columns: auto 62px auto;
+}
+
+.pdf-print-sheet .patient-info .field-weight,
+.pdf-print-sheet .patient-info .field-height {
+  grid-template-columns: auto minmax(58px, 1fr) auto;
+}
+
+.pdf-print-sheet .gender-field {
+  gap: 7px;
+  min-height: 16px;
+  font-size: 10.5px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.pdf-print-sheet .gender-field .check-item {
+  gap: 3px;
+}
+
+.pdf-print-sheet .patient-info input {
+  height: 15px;
+  padding: 0 3px;
+}
+
+.pdf-print-sheet .section-grid {
+  gap: 6px;
+}
+
+.pdf-print-sheet .check-section {
+  padding: 5px 6px;
+}
+
+.pdf-print-sheet .check-section h2 {
+  margin-bottom: 3px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.pdf-print-sheet .check-section h2 small {
+  font-size: 10.8px;
+  font-weight: 600;
+}
+
+.pdf-print-sheet .check-section h3,
+.pdf-print-sheet .condition-box h3,
+.pdf-print-sheet .handoff-box h3 {
+  margin-bottom: 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.pdf-print-sheet .line-field,
+.pdf-print-sheet .check-item {
+  font-size: 10.8px;
+  font-weight: 500;
+  line-height: 1.12;
+}
+
+.pdf-print-sheet .line-field {
+  gap: 5px;
+}
+
+.pdf-print-sheet .line-field input,
+.pdf-print-sheet .inline-input,
+.pdf-print-sheet .tiny-input {
+  height: 18px;
+  min-height: 0;
+  padding: 0 3px;
+}
+
+.pdf-print-sheet .check-list,
+.pdf-print-sheet .blood-units,
+.pdf-print-sheet .lab-values,
+.pdf-print-sheet .lab-checks,
+.pdf-print-sheet .condition-box {
+  gap: 2.5px;
+}
+
+.pdf-print-sheet .check-list.split,
+.pdf-print-sheet .check-list.two-col {
+  gap: 2.5px 9px;
+}
+
+.pdf-print-sheet .check-item {
+  gap: 5px;
+}
+
+.pdf-print-sheet .check-item input[type='checkbox'],
+.pdf-print-sheet .check-item input[type='radio'] {
+  width: 13px;
+  height: 13px;
+  accent-color: #000000;
+}
+
+.pdf-print-sheet .gender-field input[type='checkbox'],
+.pdf-print-sheet .gender-field input[type='radio'] {
+  width: 11px;
+  height: 11px;
+}
+
+.pdf-print-sheet .document-grid,
+.pdf-print-sheet .blood-grid,
+.pdf-print-sheet .lab-layout,
+.pdf-print-sheet .vital-layout,
+.pdf-print-sheet .risk-layout {
+  gap: 5px;
+}
+
+.pdf-print-sheet .risk-section .risk-layout {
+  grid-template-columns: 40% minmax(0, 60%);
+  gap: 5px;
+}
+
+.pdf-print-sheet .document-grid > div:first-child,
+.pdf-print-sheet .blood-grid > div:first-child,
+.pdf-print-sheet .lab-layout > div:first-child,
+.pdf-print-sheet .vital-layout > div:first-child,
+.pdf-print-sheet .risk-layout > div:first-child {
+  padding-right: 7px;
+}
+
+.pdf-print-sheet .risk-section .risk-layout > div:first-child {
+  padding-right: 7px;
+}
+
+.pdf-print-sheet .risk-section .asa-options {
+  gap: 3px 12px;
+}
+
+.pdf-print-sheet .risk-section .check-list.two-col {
+  grid-template-columns: minmax(72px, 0.82fr) minmax(82px, 1fr);
+  gap: 3px 7px;
+}
+
+.pdf-print-sheet .risk-section .inline-input {
+  flex-basis: 34px;
+  max-width: 50px;
+}
+
+.pdf-print-sheet .mini-row {
+  grid-template-columns: 44px repeat(3, max-content);
+  gap: 2px 4px;
+  align-items: center;
+}
+
+.pdf-print-sheet .mini-row strong {
+  font-size: 9.2px;
+  line-height: 1.05;
+  font-weight: 600;
+}
+
+.pdf-print-sheet .lab-checks .check-item {
+  font-size: 8.8px;
+  gap: 3px;
+  white-space: nowrap;
+}
+
+.pdf-print-sheet .lab-checks .check-item input[type='checkbox'] {
+  width: 11px;
+  height: 11px;
+}
+
+.pdf-print-sheet .note-field {
+  gap: 2px;
+  margin-top: 3px;
+  font-size: 10.8px;
+}
+
+.pdf-print-sheet .note-field textarea {
+  height: 24px;
+  min-height: 24px;
+  max-height: 24px;
+  padding: 3px;
+  line-height: 1.15;
+  overflow: hidden;
+  resize: none;
+}
+
+.pdf-print-sheet .risk-section .note-field {
+  height: auto;
+  margin-top: 3px;
+  overflow: visible;
+  padding-right: 0;
+}
+
+.pdf-print-sheet .risk-section .note-field textarea {
+  height: 30px;
+  min-height: 30px;
+  max-height: 30px;
+}
+
+.pdf-print-sheet .handoff-box {
+  gap: 2.5px;
+  margin-top: 3px;
+  padding: 4px;
+}
+
+.pdf-print-sheet .handoff-section {
+  gap: 3px;
+}
+
+.pdf-print-sheet .handoff-section .handoff-box {
+  margin-top: 0;
+  padding: 4px 5px;
+}
+
+.pdf-print-sheet .handoff-box .line-field {
+  grid-template-columns: 54px minmax(0, 1fr) auto;
+}
+
+.pdf-print-sheet .paper-footer {
+  margin: -3px 3px 0;
+  font-size: 7.5px;
+  line-height: 1;
 }
 
 .phone-form {

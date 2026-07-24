@@ -180,6 +180,26 @@ function summarizeRecord(record) {
   }
 }
 
+function syncFormControls(sourceElement, targetElement) {
+  const sourceControls = sourceElement.querySelectorAll('input, textarea, select')
+  const targetControls = targetElement.querySelectorAll('input, textarea, select')
+
+  sourceControls.forEach((sourceControl, index) => {
+    const targetControl = targetControls[index]
+
+    if (!targetControl) {
+      return
+    }
+
+    if (sourceControl.type === 'checkbox' || sourceControl.type === 'radio') {
+      targetControl.checked = sourceControl.checked
+      return
+    }
+
+    targetControl.value = sourceControl.value
+  })
+}
+
 async function requestApi(path, options = {}) {
   const response = await fetch(`${API_BASE_URL}${path}`, {
     headers: {
@@ -751,6 +771,8 @@ function App() {
     const exportHost = document.createElement('div')
     const exportElement = sourceElement.cloneNode(true)
 
+    exportElement.classList.add('pdf-print-sheet')
+    syncFormControls(sourceElement, exportElement)
     setIsDownloadingPdf(true)
     document.body.classList.add('pdf-exporting')
     exportHost.className = 'pdf-export-host'
@@ -771,7 +793,7 @@ function App() {
             scrollX: 0,
             scrollY: 0,
             useCORS: true,
-            windowWidth: 1060,
+            windowWidth: 760,
           },
           jsPDF: {
             format: 'a4',
