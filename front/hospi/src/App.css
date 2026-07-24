@@ -1037,10 +1037,10 @@ button:disabled {
 
 .phone-form {
   display: grid;
-  gap: 12px;
+  gap: 9px;
   width: min(100%, 680px);
   margin: 0 auto;
-  padding-bottom: 12px;
+  padding-bottom: 10px;
 }
 
 .phone-summary,
@@ -1053,36 +1053,36 @@ button:disabled {
 
 .phone-summary {
   display: grid;
-  gap: 12px;
-  padding: 16px;
+  gap: 9px;
+  padding: 12px;
 }
 
 .phone-summary h2 {
   margin: 0;
   color: var(--text-strong);
-  font-size: 24px;
+  font-size: 21px;
   line-height: 1.25;
 }
 
 .phone-stats {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
 .phone-stats span {
-  padding: 6px 10px;
+  padding: 5px 8px;
   border-radius: 999px;
   background: var(--primary-soft);
   color: var(--primary);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
 }
 
 .mobile-card {
   display: grid;
-  gap: 14px;
-  padding: 16px;
+  gap: 10px;
+  padding: 12px;
 }
 
 .mobile-card h2 {
@@ -1092,7 +1092,7 @@ button:disabled {
   gap: 7px;
   margin: 0;
   color: var(--text-strong);
-  font-size: 19px;
+  font-size: 17px;
   line-height: 1.35;
 }
 
@@ -1102,13 +1102,13 @@ button:disabled {
 
 .mobile-card h2 small {
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .mobile-field-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 9px;
 }
 
 .mobile-field-grid.compact-grid {
@@ -1127,10 +1127,10 @@ button:disabled {
 
 .mobile-field {
   display: grid;
-  gap: 6px;
+  gap: 4px;
   min-width: 0;
   color: var(--text-strong);
-  font-size: 14px;
+  font-size: 12.5px;
   font-weight: 800;
 }
 
@@ -1138,7 +1138,7 @@ button:disabled {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .mobile-field input,
@@ -1146,8 +1146,8 @@ button:disabled {
 .mobile-note textarea {
   width: 100%;
   min-width: 0;
-  min-height: 44px;
-  padding: 8px 10px;
+  min-height: 38px;
+  padding: 6px 8px;
   border: 1px solid var(--input-border);
   border-radius: 7px;
   background: #ffffff;
@@ -1173,9 +1173,9 @@ button:disabled {
   display: grid;
   grid-template-columns: auto repeat(2, minmax(0, 1fr));
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   color: var(--text-strong);
-  font-size: 14px;
+  font-size: 12.5px;
   font-weight: 800;
 }
 
@@ -1184,8 +1184,8 @@ button:disabled {
 }
 
 .mobile-segment button {
-  min-height: 40px;
-  padding: 0 10px;
+  min-height: 34px;
+  padding: 0 8px;
   border-color: var(--border);
   background: #ffffff;
   color: var(--text);
@@ -1199,7 +1199,7 @@ button:disabled {
 
 .mobile-check-list {
   display: grid;
-  gap: 9px;
+  gap: 6px;
 }
 
 .mobile-check-list.small-checks {
@@ -1208,47 +1208,48 @@ button:disabled {
 
 .mobile-check {
   display: grid;
-  grid-template-columns: 22px minmax(0, 1fr);
+  grid-template-columns: 18px minmax(0, 1fr);
   align-items: start;
-  gap: 9px;
+  gap: 7px;
   min-width: 0;
   color: var(--text-strong);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 650;
-  line-height: 1.38;
+  line-height: 1.3;
 }
 
 .mobile-check input[type='checkbox'] {
-  width: 20px;
-  height: 20px;
-  margin: 2px 0 0;
+  width: 17px;
+  height: 17px;
+  margin: 1px 0 0;
   accent-color: var(--primary);
 }
 
 .mobile-check input:not([type='checkbox']) {
   grid-column: 2;
-  min-height: 40px;
-  margin-top: 4px;
+  min-height: 36px;
+  margin-top: 3px;
 }
 
 .mobile-note {
   display: grid;
-  gap: 7px;
+  gap: 5px;
   color: var(--text-strong);
   font-weight: 800;
+  font-size: 12.5px;
 }
 
 .mobile-note textarea {
-  min-height: 128px;
-  line-height: 1.5;
+  min-height: 104px;
+  line-height: 1.4;
   resize: vertical;
 }
 
 .phone-action-bar {
   display: grid;
   grid-template-columns: 0.7fr 1fr 1fr;
-  gap: 8px;
-  padding: 10px max(12px, env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  gap: 6px;
+  padding: 8px max(10px, env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
   border-top: 1px solid var(--border);
   border-radius: 8px;
   background: #ffffff;
@@ -2059,7 +2060,7 @@ button:disabled {
 
   .phone-form {
     width: 100%;
-    gap: 10px;
+    gap: 9px;
   }
 
   .phone-summary,
@@ -2068,7 +2069,7 @@ button:disabled {
   }
 
   .phone-summary h2 {
-    font-size: 21px;
+    font-size: 20px;
   }
 
   .mobile-field-grid,
@@ -2150,20 +2151,20 @@ button:disabled {
 
   .mobile-field-grid,
   .mobile-field-grid.compact-grid {
-    gap: 10px;
+    gap: 8px;
   }
 
   .mobile-card h2 {
-    font-size: 17px;
+    font-size: 16px;
   }
 
   .mobile-field,
   .mobile-segment {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .mobile-check {
-    font-size: 13.5px;
+    font-size: 12.5px;
   }
 
   .phone-action-bar {
