@@ -1,0 +1,6 @@
+{
+  "installCommand": "cd front/hospi && npm install",
+  "buildCommand": "cd front/hospi && npm run build",
+  "outputDirectory": "front/hospi/dist",
+  "framework": "vite"
+}
