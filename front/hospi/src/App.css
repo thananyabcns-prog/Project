@@ -1277,6 +1277,12 @@ button:disabled {
   .sidebar {
     position: static;
     height: auto;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .nav-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .toolbar {
@@ -1299,6 +1305,43 @@ button:disabled {
     padding: 16px;
   }
 
+  .toolbar {
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .toolbar > div {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .toolbar h1 {
+    max-width: calc(100vw - 24px);
+    font-size: 25px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .toolbar-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .paper-sheet {
+    width: 100%;
+    max-width: calc(100vw - 24px);
+    border-width: 1.5px;
+    border-radius: 6px;
+    box-shadow: none;
+    overflow: hidden;
+  }
+
+  .checklist-form {
+    gap: 8px;
+    padding: 8px;
+  }
+
   .paper-header,
   .print-header,
   .section-grid.two,
@@ -1318,6 +1361,80 @@ button:disabled {
     grid-template-columns: 1fr;
   }
 
+  .paper-header {
+    gap: 10px;
+    min-height: 0;
+  }
+
+  .paper-header > div,
+  .print-header > div {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .paper-header h1,
+  .print-header h1 {
+    max-width: calc(100vw - 56px);
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 24px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    line-break: anywhere;
+  }
+
+  .paper-header p,
+  .print-header p {
+    max-width: calc(100vw - 56px);
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 18px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    line-break: anywhere;
+  }
+
+  .header-fields,
+  .patient-info,
+  .check-section {
+    padding: 10px;
+  }
+
+  .patient-row,
+  .patient-top-row,
+  .patient-code-row,
+  .demographics-row,
+  .body-row,
+  .doctor-row {
+    gap: 8px;
+  }
+
+  .line-field,
+  .check-item,
+  .gender-field {
+    font-size: 15.5px;
+  }
+
+  .line-field input {
+    height: 38px;
+  }
+
+  .patient-info .field-age,
+  .patient-info .field-hn,
+  .patient-info .field-an,
+  .patient-info .field-weight,
+  .patient-info .field-height,
+  .handoff-box .line-field,
+  .lab-values .line-field {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .gender-field {
+    flex-wrap: wrap;
+  }
+
   .document-grid > div:first-child,
   .blood-grid > div:first-child,
   .lab-layout > div:first-child,
@@ -1332,6 +1449,36 @@ button:disabled {
   .check-list.split,
   .check-list.two-col {
     grid-template-columns: 1fr;
+    grid-auto-flow: row;
+  }
+
+  .mini-row {
+    grid-template-columns: minmax(50px, 0.75fr) repeat(3, max-content);
+    gap: 6px;
+  }
+
+  .lab-checks .check-item span {
+    white-space: normal;
+  }
+
+  .risk-section .risk-layout,
+  .risk-section .check-list.two-col {
+    grid-template-columns: 1fr;
+  }
+
+  .risk-section .risk-layout > div:first-child {
+    padding-right: 0;
+  }
+
+  .risk-section .note-field {
+    height: auto;
+    overflow: visible;
+  }
+
+  .risk-section .note-field textarea {
+    height: 96px;
+    max-height: none;
+    overflow: auto;
   }
 
   .toolbar-actions,
@@ -1356,5 +1503,204 @@ button:disabled {
 
   .record-actions {
     width: 100%;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .sidebar {
+    padding: 14px 12px;
+  }
+
+  .brand-mark {
+    width: 40px;
+    height: 40px;
+  }
+
+  .brand strong {
+    font-size: 15px;
+  }
+
+  .brand small {
+    font-size: 12px;
+  }
+
+  .nav-list button {
+    min-height: 40px;
+    padding: 0 10px;
+    font-size: 14px;
+  }
+
+  .nav-list {
+    grid-template-columns: 1fr;
+  }
+
+  .workspace {
+    padding: 12px;
+  }
+
+  .toolbar h1 {
+    font-size: 22px;
+    line-break: anywhere;
+  }
+
+  .toolbar h1 {
+    font-size: 0;
+  }
+
+  .toolbar h1::before {
+    content: 'แบบตรวจสอบก่อนส่งผู้ป่วย\Aเข้าห้องผ่าตัด';
+    display: block;
+    color: var(--text-strong);
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.22;
+    white-space: pre-line;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+  }
+
+  .toolbar-actions,
+  .form-footer {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  button {
+    min-height: 42px;
+    padding: 0 12px;
+  }
+
+  .paper-header h1,
+  .print-header h1 {
+    font-size: 0;
+  }
+
+  .paper-header h1::before,
+  .print-header h1::before {
+    content: 'แบบตรวจสอบก่อนส่ง\Aผู้ป่วยเข้าห้องผ่าตัด';
+    display: block;
+    color: #111827;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.18;
+    white-space: pre-line;
+  }
+
+  .paper-header p,
+  .print-header p {
+    font-size: 15.5px;
+  }
+
+  .header-fields,
+  .patient-info,
+  .check-section {
+    padding: 9px;
+  }
+
+  .check-section h2 {
+    font-size: 17px;
+    line-height: 1.28;
+  }
+
+  .check-section h2 small {
+    font-size: 13px;
+  }
+
+  .check-section h3,
+  .condition-box h3,
+  .handoff-box h3 {
+    font-size: 15px;
+  }
+
+  .line-field,
+  .check-item,
+  .gender-field {
+    font-size: 14.5px;
+  }
+
+  .line-field > span {
+    white-space: normal;
+  }
+
+  .check-item {
+    align-items: flex-start;
+  }
+
+  .check-item input[type='checkbox'],
+  .check-item input[type='radio'] {
+    width: 17px;
+    height: 17px;
+    margin-top: 2px;
+  }
+
+  .check-item span,
+  .record-main strong,
+  .record-main span,
+  .record-detail span {
+    overflow-wrap: anywhere;
+  }
+
+  .mini-row {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .lab-checks {
+    gap: 9px;
+  }
+
+  .asa-options {
+    grid-template-columns: repeat(3, minmax(0, auto));
+  }
+
+  .handoff-box {
+    padding: 9px;
+  }
+
+  .records-head,
+  .records-tools,
+  .record-row,
+  .records-alert,
+  .empty-records {
+    padding: 12px;
+  }
+
+  .records-head h2 {
+    font-size: 21px;
+  }
+
+  .records-tool-actions,
+  .record-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .nav-list {
+    grid-template-columns: 1fr;
+  }
+
+  .line-field {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 4px;
+  }
+
+  .line-field > span,
+  .line-field em {
+    white-space: normal;
+  }
+
+  .line-field input,
+  .inline-input,
+  .tiny-input {
+    width: 100%;
+  }
+
+  .gender-field {
+    align-items: flex-start;
   }
 }
