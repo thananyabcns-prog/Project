@@ -241,6 +241,302 @@ function Section({ number, title, subtitle, children, className = '' }) {
   )
 }
 
+function detectPhoneLayout() {
+  if (typeof window === 'undefined') {
+    return false
+  }
+
+  return window.matchMedia('(max-width: 760px)').matches
+}
+
+function getInitialDeviceMode() {
+  if (typeof window === 'undefined') {
+    return 'welcome'
+  }
+
+  const savedMode = window.localStorage.getItem('hos-device-mode')
+
+  if (savedMode === 'desktop' || savedMode === 'phone') {
+    return savedMode
+  }
+
+  return detectPhoneLayout() ? 'phone' : 'welcome'
+}
+
+function WelcomeView({ onChoose, recommendedMode }) {
+  return (
+    <main className="welcome-shell">
+      <section className="welcome-panel">
+        <div className="welcome-brand">
+          <span className="brand-mark">OR</span>
+          <div>
+            <p className="eyebrow">Pre-OR Safety Checklist</p>
+            <h1>แบบตรวจสอบก่อนส่งผู้ป่วยเข้าห้องผ่าตัด</h1>
+          </div>
+        </div>
+
+        <div className="mode-cards">
+          <button type="button" className="mode-card primary-mode" onClick={() => onChoose('phone')}>
+            <span>{recommendedMode === 'phone' ? 'แนะนำสำหรับเครื่องนี้' : 'โหมดโทรศัพท์'}</span>
+            <strong>กรอกบนโทรศัพท์</strong>
+            <small>หน้าฟอร์มแยกสำหรับจอเล็ก เรียงทีละหมวด กดง่าย อ่านง่าย และยังพิมพ์เป็น A4 ได้เหมือนเดิม</small>
+          </button>
+          <button type="button" className="mode-card" onClick={() => onChoose('desktop')}>
+            <span>{recommendedMode === 'desktop' ? 'แนะนำสำหรับเครื่องนี้' : 'โหมดคอมพิวเตอร์'}</span>
+            <strong>กรอกแบบกระดาษ A4</strong>
+            <small>เหมาะกับคอมพิวเตอร์หรือแท็บเล็ตจอกว้าง เห็นเอกสารทั้งใบใกล้เคียงต้นฉบับ</small>
+          </button>
+        </div>
+      </section>
+    </main>
+  )
+}
+
+function MobileTextInput({ label, name, value, onChange, unit = '', placeholder = '' }) {
+  return (
+    <label className="mobile-field">
+      <span>{label}</span>
+      <div>
+        <input name={name} value={value} onChange={onChange} placeholder={placeholder} />
+        {unit && <em>{unit}</em>}
+      </div>
+    </label>
+  )
+}
+
+function MobileCheckItem({ id, label, checked, onChange, children }) {
+  return (
+    <label className="mobile-check">
+      <input type="checkbox" name={id} checked={checked} onChange={onChange} />
+      <span>{label}</span>
+      {children}
+    </label>
+  )
+}
+
+function MobileCard({ number, title, subtitle, children }) {
+  return (
+    <section className="mobile-card">
+      <h2>
+        <span>{number}</span>
+        {title}
+        {subtitle && <small>{subtitle}</small>}
+      </h2>
+      {children}
+    </section>
+  )
+}
+
+function MobileChecklist({
+  form,
+  checks,
+  updateField,
+  updateCheck,
+  setForm,
+  resetForm,
+  saveCurrentRecord,
+  printForm,
+  saveMessage,
+  isSaving,
+  requiredCount,
+  checkedCount,
+}) {
+  return (
+    <section className="phone-form no-print" aria-label="แบบฟอร์มสำหรับโทรศัพท์">
+      <div className="phone-summary">
+        <div>
+          <p className="eyebrow">Mobile Entry</p>
+          <h2>กรอกข้อมูลผู้ป่วย</h2>
+        </div>
+        <div className="phone-stats">
+          <span>{requiredCount}/7 ข้อมูลหลัก</span>
+          <span>{checkedCount} รายการตรวจ</span>
+        </div>
+      </div>
+
+      {saveMessage && <div className="save-banner">{saveMessage}</div>}
+
+      <MobileCard number="0." title="ข้อมูลทั่วไป">
+        <div className="mobile-field-grid">
+          <MobileTextInput label="วันที่" name="date" value={form.date} onChange={updateField} placeholder="วว/ดด/พ.ศ." />
+          <MobileTextInput label="เวลา" name="time" value={form.time} onChange={updateField} placeholder="00:00 น." />
+          <MobileTextInput label="Ward" name="ward" value={form.ward} onChange={updateField} />
+          <MobileTextInput label="ชื่อ-สกุลผู้ป่วย" name="patientName" value={form.patientName} onChange={updateField} />
+          <MobileTextInput label="อายุ" name="age" value={form.age} onChange={updateField} unit="ปี" />
+          <div className="mobile-segment">
+            <span>เพศ</span>
+            <button type="button" className={form.gender === 'ชาย' ? 'active' : ''} onClick={() => setForm((current) => ({ ...current, gender: 'ชาย' }))}>
+              ชาย
+            </button>
+            <button type="button" className={form.gender === 'หญิง' ? 'active' : ''} onClick={() => setForm((current) => ({ ...current, gender: 'หญิง' }))}>
+              หญิง
+            </button>
+          </div>
+          <MobileTextInput label="HN" name="hn" value={form.hn} onChange={updateField} />
+          <MobileTextInput label="AN" name="an" value={form.an} onChange={updateField} />
+          <MobileTextInput label="น้ำหนัก" name="weight" value={form.weight} onChange={updateField} unit="kg." />
+          <MobileTextInput label="ส่วนสูง" name="height" value={form.height} onChange={updateField} unit="cm." />
+          <MobileTextInput label="หัตถการ/ผ่าตัด" name="procedure" value={form.procedure} onChange={updateField} />
+          <MobileTextInput label="ตำแหน่งผ่าตัด (Mark site)" name="markSite" value={form.markSite} onChange={updateField} />
+          <MobileTextInput label="แพทย์ผู้ผ่าตัด" name="surgeon" value={form.surgeon} onChange={updateField} />
+          <MobileTextInput label="วิสัญญีแพทย์" name="anesthesiologist" value={form.anesthesiologist} onChange={updateField} />
+        </div>
+      </MobileCard>
+
+      <MobileCard number="1." title="การยืนยันตัวผู้ป่วย" subtitle="Patient Identification">
+        <div className="mobile-check-list">
+          {identificationItems.map(([id, label]) => (
+            <MobileCheckItem key={id} id={id} label={label} checked={checks[id]} onChange={updateCheck} />
+          ))}
+        </div>
+      </MobileCard>
+
+      <MobileCard number="2." title="การเตรียมก่อนผ่าตัด">
+        <div className="mobile-check-list">
+          {preparationItems.map(([id, label]) => (
+            <MobileCheckItem key={id} id={id} label={label} checked={checks[id]} onChange={updateCheck}>
+              {id === 'npo' && <input name="npoTime" value={form.npoTime} onChange={updateField} placeholder="เวลา" />}
+              {id === 'premedGiven' && <input name="premedTime" value={form.premedTime} onChange={updateField} placeholder="เวลา" />}
+            </MobileCheckItem>
+          ))}
+        </div>
+      </MobileCard>
+
+      <MobileCard number="3." title="อุปกรณ์และเอกสาร">
+        <div className="mobile-check-list">
+          {equipmentItemsLeft.map(([id, label]) => (
+            <MobileCheckItem key={id} id={id} label={label} checked={checks[id]} onChange={updateCheck}>
+              {id === 'ivLine' && (
+                <>
+                  <input name="ivSize" value={form.ivSize} onChange={updateField} placeholder="ขนาด G" />
+                  <input name="ivPosition" value={form.ivPosition} onChange={updateField} placeholder="ตำแหน่ง" />
+                </>
+              )}
+            </MobileCheckItem>
+          ))}
+          {equipmentItemsRight.map(([id, label]) => (
+            <MobileCheckItem key={id} id={id} label={label} checked={checks[id]} onChange={updateCheck}>
+              {id === 'documentOther' && <input name="otherDocument" value={form.otherDocument} onChange={updateField} placeholder="ระบุ" />}
+            </MobileCheckItem>
+          ))}
+        </div>
+      </MobileCard>
+
+      <MobileCard number="4." title="การจองเลือด" subtitle="Blood Reservation">
+        <div className="mobile-check-list">
+          <MobileCheckItem id="noBloodNeeded" label="ไม่ต้องจองเลือด" checked={checks.noBloodNeeded} onChange={updateCheck} />
+          <MobileCheckItem id="bloodReserved" label="จองแล้ว" checked={checks.bloodReserved} onChange={updateCheck} />
+        </div>
+        <div className="mobile-field-grid compact-grid">
+          <MobileTextInput label="PRC" name="bloodPRC" value={form.bloodPRC} onChange={updateField} unit="unit" />
+          <MobileTextInput label="FFP" name="bloodFFP" value={form.bloodFFP} onChange={updateField} unit="unit" />
+          <MobileTextInput label="WB" name="bloodWB" value={form.bloodWB} onChange={updateField} unit="unit" />
+          <MobileTextInput label="หมายเหตุ" name="bloodNote" value={form.bloodNote} onChange={updateField} />
+        </div>
+      </MobileCard>
+
+      <MobileCard number="5." title="ผลตรวจทางห้องปฏิบัติการ" subtitle="Lab">
+        <div className="mobile-field-grid compact-grid">
+          <MobileTextInput label="Hb" name="hb" value={form.hb} onChange={updateField} unit="g/dL" />
+          <MobileTextInput label="Hct" name="hct" value={form.hct} onChange={updateField} unit="%" />
+          <MobileTextInput label="FBS" name="fbs" value={form.fbs} onChange={updateField} unit="mg/dL" />
+          <MobileTextInput label="BUN" name="bun" value={form.bun} onChange={updateField} unit="mg/dL" />
+          <MobileTextInput label="Cr" name="cr" value={form.cr} onChange={updateField} unit="mg/dL" />
+          <MobileTextInput label="Electrolyte" name="electrolyte" value={form.electrolyte} onChange={updateField} />
+          <MobileTextInput label="อื่น ๆ" name="labOther" value={form.labOther} onChange={updateField} />
+        </div>
+        <div className="mobile-check-list small-checks">
+          {[
+            ['cxrYes', 'CXR มี'],
+            ['cxrNo', 'CXR ไม่มี'],
+            ['cxrRead', 'CXR อ่านผลแล้ว'],
+            ['ekgYes', 'EKG มี'],
+            ['ekgNo', 'EKG ไม่มี'],
+            ['ekgRead', 'EKG อ่านผลแล้ว'],
+            ['vdrlReactive', 'VDRL Reactive'],
+            ['vdrlNonReactive', 'VDRL Non-Reactive'],
+            ['papNormal', 'Pap smear ปกติ'],
+            ['papAbnormal', 'Pap smear ผิดปกติ'],
+            ['papNotChecked', 'Pap smear ยังไม่ตรวจ'],
+            ['hbsReactive', 'HBs Ag Reactive'],
+            ['hbsNonReactive', 'HBs Ag Non-Reactive'],
+          ].map(([id, label]) => (
+            <MobileCheckItem key={id} id={id} label={label} checked={checks[id]} onChange={updateCheck} />
+          ))}
+        </div>
+      </MobileCard>
+
+      <MobileCard number="6." title="สัญญาณชีพล่าสุด" subtitle="Vital Signs">
+        <div className="mobile-field-grid compact-grid">
+          <MobileTextInput label="BP" name="bp" value={form.bp} onChange={updateField} unit="mmHg" />
+          <MobileTextInput label="PR" name="pr" value={form.pr} onChange={updateField} unit="/min" />
+          <MobileTextInput label="RR" name="rr" value={form.rr} onChange={updateField} unit="/min" />
+          <MobileTextInput label="SpO₂" name="spo2" value={form.spo2} onChange={updateField} unit="%" />
+          <MobileTextInput label="Temp" name="temp" value={form.temp} onChange={updateField} unit="°C" />
+        </div>
+        <div className="mobile-check-list small-checks">
+          {patientConditionItems.map(([id, label]) => (
+            <MobileCheckItem key={id} id={id} label={label} checked={checks[id]} onChange={updateCheck} />
+          ))}
+        </div>
+      </MobileCard>
+
+      <MobileCard number="7." title="การประเมินความเสี่ยง">
+        <div className="mobile-segment multi">
+          <span>ASA Class</span>
+          {['I', 'II', 'III', 'IV', 'V', 'E'].map((level) => (
+            <button
+              key={level}
+              type="button"
+              className={form.asaClass === level ? 'active' : ''}
+              onClick={() => setForm((current) => ({ ...current, asaClass: current.asaClass === level ? '' : level }))}
+            >
+              {level}
+            </button>
+          ))}
+        </div>
+        <div className="mobile-check-list">
+          {airwayItems.map(([id, label]) => (
+            <MobileCheckItem key={id} id={id} label={label} checked={checks[id]} onChange={updateCheck}>
+              {id === 'airwayOtherCheck' && <input name="airwayOther" value={form.airwayOther} onChange={updateField} placeholder="ระบุ" />}
+            </MobileCheckItem>
+          ))}
+        </div>
+        <label className="mobile-note">
+          <span>หมายเหตุ</span>
+          <textarea name="note" value={form.note} onChange={updateField} rows="5" />
+        </label>
+      </MobileCard>
+
+      <MobileCard number="8." title="การส่งต่อผู้ป่วย">
+        <div className="mobile-field-grid">
+          <MobileTextInput label="เวลาออกจากหอผู้ป่วย" name="transferTime" value={form.transferTime} onChange={updateField} unit="น." />
+          <MobileTextInput label="ผู้ส่ง: ชื่อ-สกุล" name="wardSenderName" value={form.wardSenderName} onChange={updateField} />
+          <MobileTextInput label="ผู้ส่ง: ตำแหน่ง" name="wardSenderPosition" value={form.wardSenderPosition} onChange={updateField} />
+          <MobileTextInput label="ผู้ส่ง: ลายมือชื่อ" name="wardSenderSignature" value={form.wardSenderSignature} onChange={updateField} />
+          <MobileTextInput label="ผู้ส่ง: เวลา" name="wardSenderTime" value={form.wardSenderTime} onChange={updateField} unit="น." />
+          <MobileTextInput label="ผู้รับ OR: ชื่อ-สกุล" name="orReceiverName" value={form.orReceiverName} onChange={updateField} />
+          <MobileTextInput label="ผู้รับ OR: ตำแหน่ง" name="orReceiverPosition" value={form.orReceiverPosition} onChange={updateField} />
+          <MobileTextInput label="ผู้รับ OR: ลายมือชื่อ" name="orReceiverSignature" value={form.orReceiverSignature} onChange={updateField} />
+          <MobileTextInput label="ผู้รับ OR: เวลา" name="orReceiverTime" value={form.orReceiverTime} onChange={updateField} unit="น." />
+        </div>
+      </MobileCard>
+
+      <footer className="phone-action-bar">
+        <button type="button" className="secondary-button" onClick={resetForm}>
+          ล้าง
+        </button>
+        <button type="button" className="secondary-button" onClick={saveCurrentRecord} disabled={isSaving}>
+          {isSaving ? 'บันทึก...' : 'บันทึก'}
+        </button>
+        <button type="button" className="primary-button" onClick={printForm}>
+          พิมพ์ A4
+        </button>
+      </footer>
+    </section>
+  )
+}
+
 function RecordsView({ records, search, onSearch, onOpen, onDelete, onNew, isLoading, error, onRefresh }) {
   const normalizedSearch = search.trim().toLowerCase()
   const filteredRecords = records.filter((record) => {
@@ -336,6 +632,7 @@ function App() {
   const [form, setForm] = useState(initialForm)
   const [checks, setChecks] = useState(initialChecks)
   const [mode, setMode] = useState('form')
+  const [deviceMode, setDeviceMode] = useState(getInitialDeviceMode)
   const [records, setRecords] = useState([])
   const [activeRecordId, setActiveRecordId] = useState('')
   const [recordSearch, setRecordSearch] = useState('')
@@ -363,6 +660,14 @@ function App() {
   useEffect(() => {
     loadRecords()
   }, [])
+
+  const recommendedMode = useMemo(() => (detectPhoneLayout() ? 'phone' : 'desktop'), [])
+
+  function chooseDeviceMode(nextMode) {
+    setDeviceMode(nextMode)
+    window.localStorage.setItem('hos-device-mode', nextMode)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   async function loadRecords() {
     setIsLoadingRecords(true)
@@ -460,8 +765,12 @@ function App() {
     }
   }
 
+  if (deviceMode === 'welcome') {
+    return <WelcomeView onChoose={chooseDeviceMode} recommendedMode={recommendedMode} />
+  }
+
   return (
-    <main className="app-shell">
+    <main className={`app-shell device-${deviceMode}`}>
       <aside className="sidebar no-print">
         <div className="brand">
           <span className="brand-mark">OR</span>
@@ -481,6 +790,18 @@ function App() {
             ข้อมูลผู้ป่วย
           </button>
         </nav>
+
+        <div className="mode-switch">
+          <p>โหมดการใช้งาน</p>
+          <div>
+            <button type="button" className={deviceMode === 'phone' ? 'active' : ''} onClick={() => chooseDeviceMode('phone')}>
+              โทรศัพท์
+            </button>
+            <button type="button" className={deviceMode === 'desktop' ? 'active' : ''} onClick={() => chooseDeviceMode('desktop')}>
+              คอม
+            </button>
+          </div>
+        </div>
 
         <div className="status-box">
           <p>ข้อมูลหลัก</p>
@@ -508,6 +829,9 @@ function App() {
               </button>
             ) : (
               <>
+                <button type="button" className="secondary-button mode-toggle" onClick={() => chooseDeviceMode(deviceMode === 'phone' ? 'desktop' : 'phone')}>
+                  {deviceMode === 'phone' ? 'โหมดคอม' : 'โหมดโทรศัพท์'}
+                </button>
                 <button type="button" className="secondary-button" onClick={resetForm}>
                   ล้างฟอร์ม
                 </button>
@@ -535,6 +859,23 @@ function App() {
             onRefresh={loadRecords}
           />
         ) : (
+          <>
+          {deviceMode === 'phone' && (
+            <MobileChecklist
+              form={form}
+              checks={checks}
+              updateField={updateField}
+              updateCheck={updateCheck}
+              setForm={setForm}
+              resetForm={resetForm}
+              saveCurrentRecord={saveCurrentRecord}
+              printForm={printForm}
+              saveMessage={saveMessage}
+              isSaving={isSaving}
+              requiredCount={requiredCount}
+              checkedCount={checkedCount}
+            />
+          )}
           <form
             id="or-checklist-form"
             className="checklist-form paper-sheet"
@@ -777,6 +1118,9 @@ function App() {
             </footer>
             {mode === 'form' && (
               <footer className="form-footer no-print">
+                <button type="button" className="secondary-button mode-toggle" onClick={() => chooseDeviceMode(deviceMode === 'phone' ? 'desktop' : 'phone')}>
+                  {deviceMode === 'phone' ? 'โหมดคอม' : 'โหมดโทรศัพท์'}
+                </button>
                 <button type="button" className="secondary-button" onClick={resetForm}>
                   ล้างฟอร์ม
                 </button>
@@ -789,6 +1133,7 @@ function App() {
               </footer>
             )}
           </form>
+          </>
         )}
       </section>
     </main>
