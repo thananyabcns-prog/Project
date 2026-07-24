@@ -1669,8 +1669,44 @@ button:disabled {
 }
 
 @media screen and (max-width: 380px) {
+  body {
+    overflow-x: hidden;
+  }
+
   .nav-list {
     grid-template-columns: 1fr;
+  }
+
+  .paper-sheet {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .paper-header > div:first-child,
+  .print-header > div:first-child {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .paper-header h1,
+  .print-header h1 {
+    max-width: 100%;
+    font-size: 18px;
+  }
+
+  .title-line span {
+    display: block;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-all;
+  }
+
+  .check-section h2,
+  .check-section h2 small {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .line-field {
