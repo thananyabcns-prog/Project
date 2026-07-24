@@ -496,7 +496,10 @@ function App() {
         <div className="toolbar no-print">
           <div>
             <p className="eyebrow">Pre-OR Safety Checklist</p>
-            <h1>แบบตรวจสอบก่อนส่งผู้ป่วยเข้าห้องผ่าตัด</h1>
+            <h1 className="title-line">
+              <span>แบบตรวจสอบก่อนส่ง</span>
+              <span>ผู้ป่วยเข้าห้องผ่าตัด</span>
+            </h1>
           </div>
           <div className="toolbar-actions">
             {mode === 'records' ? (
@@ -539,7 +542,10 @@ function App() {
           >
             <header className="paper-header">
               <div>
-                <h1>แบบตรวจสอบก่อนส่งผู้ป่วยเข้าห้องผ่าตัด</h1>
+                <h1 className="title-line">
+                  <span>แบบตรวจสอบก่อนส่ง</span>
+                  <span>ผู้ป่วยเข้าห้องผ่าตัด</span>
+                </h1>
                 <p>(Pre-OR Safety Checklist)</p>
               </div>
               <div className="header-fields">

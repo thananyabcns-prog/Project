@@ -128,6 +128,10 @@
   line-height: 1.25;
 }
 
+.title-line span {
+  display: inline;
+}
+
 .eyebrow {
   margin: 0 0 5px;
   color: var(--accent);
@@ -1334,7 +1338,7 @@ button:disabled {
     border-width: 1.5px;
     border-radius: 6px;
     box-shadow: none;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .checklist-form {
@@ -1495,6 +1499,12 @@ button:disabled {
     grid-template-columns: 1fr;
   }
 
+  .form-footer {
+    position: static;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
   .toolbar-actions button,
   .form-footer button,
   .record-actions button {
@@ -1543,18 +1553,8 @@ button:disabled {
     line-break: anywhere;
   }
 
-  .toolbar h1 {
-    font-size: 0;
-  }
-
-  .toolbar h1::before {
-    content: 'แบบตรวจสอบก่อนส่งผู้ป่วย\Aเข้าห้องผ่าตัด';
+  .title-line span {
     display: block;
-    color: var(--text-strong);
-    font-size: 22px;
-    font-weight: 800;
-    line-height: 1.22;
-    white-space: pre-line;
   }
 
   .eyebrow {
@@ -1574,18 +1574,8 @@ button:disabled {
 
   .paper-header h1,
   .print-header h1 {
-    font-size: 0;
-  }
-
-  .paper-header h1::before,
-  .print-header h1::before {
-    content: 'แบบตรวจสอบก่อนส่ง\Aผู้ป่วยเข้าห้องผ่าตัด';
-    display: block;
-    color: #111827;
     font-size: 20px;
-    font-weight: 700;
     line-height: 1.18;
-    white-space: pre-line;
   }
 
   .paper-header p,
