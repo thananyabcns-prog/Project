@@ -1043,6 +1043,48 @@ button:disabled {
   padding-bottom: 10px;
 }
 
+.phone-topbar,
+.phone-nav {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.phone-topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+}
+
+.phone-topbar h1 {
+  margin: 0;
+  color: var(--text-strong);
+  font-size: 18px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.phone-nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  padding: 6px;
+}
+
+.phone-nav button {
+  min-height: 36px;
+  border-color: transparent;
+  background: transparent;
+  color: var(--text);
+}
+
+.phone-nav button.active {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
 .phone-summary,
 .mobile-card {
   border: 1px solid var(--border);
@@ -1266,6 +1308,30 @@ button:disabled {
 
 .device-phone .status-box {
   display: none;
+}
+
+@media screen and (max-width: 760px) {
+  .device-phone {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .device-phone .sidebar,
+  .device-phone .toolbar {
+    display: none;
+  }
+
+  .device-phone .workspace {
+    width: 100%;
+    min-width: 0;
+    padding: 8px;
+  }
+
+  .device-phone .phone-form {
+    width: 100%;
+    max-width: none;
+  }
 }
 
 @media print {

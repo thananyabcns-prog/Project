@@ -333,6 +333,8 @@ function MobileChecklist({
   updateField,
   updateCheck,
   setForm,
+  setMode,
+  chooseDeviceMode,
   resetForm,
   saveCurrentRecord,
   printForm,
@@ -343,6 +345,25 @@ function MobileChecklist({
 }) {
   return (
     <section className="phone-form no-print" aria-label="แบบฟอร์มสำหรับโทรศัพท์">
+      <header className="phone-topbar">
+        <div>
+          <p className="eyebrow">Pre-OR Safety Checklist</p>
+          <h1>แบบตรวจสอบก่อนส่งผู้ป่วยเข้าห้องผ่าตัด</h1>
+        </div>
+        <button type="button" className="secondary-button" onClick={() => chooseDeviceMode('desktop')}>
+          โหมดคอม
+        </button>
+      </header>
+
+      <nav className="phone-nav">
+        <button type="button" className="active" onClick={() => setMode('form')}>
+          กรอกข้อมูล
+        </button>
+        <button type="button" onClick={() => setMode('records')}>
+          ข้อมูลผู้ป่วย
+        </button>
+      </nav>
+
       <div className="phone-summary">
         <div>
           <p className="eyebrow">Mobile Entry</p>
@@ -867,6 +888,8 @@ function App() {
               updateField={updateField}
               updateCheck={updateCheck}
               setForm={setForm}
+              setMode={setMode}
+              chooseDeviceMode={chooseDeviceMode}
               resetForm={resetForm}
               saveCurrentRecord={saveCurrentRecord}
               printForm={printForm}
