@@ -446,6 +446,7 @@ button:disabled {
   color: #111827;
   font: inherit;
   font-weight: 500;
+  text-align: center;
   outline: none;
 }
 
@@ -570,6 +571,7 @@ button:disabled {
   border-radius: 0;
   background: transparent;
   font: inherit;
+  text-align: center;
   outline: none;
 }
 
@@ -736,6 +738,7 @@ button:disabled {
   border-radius: 5px;
   font: inherit;
   line-height: 1.35;
+  text-align: center;
   overflow: hidden;
   overflow-wrap: anywhere;
   resize: vertical;
