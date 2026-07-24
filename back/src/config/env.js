@@ -2,9 +2,17 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
+function listFromEnv(value, fallback) {
+  return (value || fallback)
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean)
+}
+
 export const env = {
   port: Number(process.env.PORT || 4000),
   frontendOrigin: process.env.FRONTEND_ORIGIN || 'http://localhost:5173',
+  frontendOrigins: listFromEnv(process.env.FRONTEND_ORIGIN, 'http://localhost:5173'),
   storageDriver: process.env.STORAGE_DRIVER || 'json',
   jsonDataFile: process.env.JSON_DATA_FILE || './data/patient-records.json',
   mongodbUri: process.env.MONGODB_URI || '',

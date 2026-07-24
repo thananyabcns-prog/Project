@@ -10,7 +10,16 @@ import { asyncHandler } from './utils/asyncHandler.js'
 export function createApp() {
   const app = express()
 
-  app.use(cors({ origin: env.frontendOrigin }))
+  app.use(
+    cors({
+      origin(origin, callback) {
+        const isAllowedOrigin =
+          !origin || env.frontendOrigins.includes(origin) || origin.endsWith('.vercel.app')
+
+        callback(null, isAllowedOrigin)
+      },
+    }),
+  )
   app.use(express.json({ limit: '2mb' }))
 
   app.get('/health', (_req, res) => {

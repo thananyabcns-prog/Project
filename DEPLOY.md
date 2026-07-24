@@ -31,6 +31,12 @@ MONGODB_DB_NAME=hos
 MONGODB_COLLECTION=patient_records
 ```
 
+Use comma-separated origins if you need more than one frontend origin, for example:
+
+```text
+FRONTEND_ORIGIN=http://localhost:5173,https://YOUR-FRONTEND-DOMAIN
+```
+
 Do not commit `.env` or database passwords.
 
 After Render deploys, test:
