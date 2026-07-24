@@ -738,6 +738,18 @@ function App() {
     window.print()
   }
 
+  function downloadPdf() {
+    const originalTitle = document.title
+    const filenameParts = ['Pre-OR Checklist', form.patientName, form.hn].filter(Boolean)
+    const pdfTitle = filenameParts.join(' - ').replace(/[\\/:*?"<>|]/g, '').trim()
+
+    document.title = pdfTitle || 'Pre-OR Checklist'
+    window.print()
+    window.setTimeout(() => {
+      document.title = originalTitle
+    }, 1000)
+  }
+
   async function saveCurrentRecord() {
     setIsSaving(true)
     setSaveMessage('')
@@ -873,6 +885,9 @@ function App() {
                 </button>
                 <button type="button" className="secondary-button" onClick={saveCurrentRecord} disabled={isSaving}>
                   {isSaving ? 'กำลังบันทึก...' : 'บันทึกข้อมูล'}
+                </button>
+                <button type="button" className="secondary-button" onClick={downloadPdf}>
+                  Download PDF
                 </button>
                 <button type="button" className="primary-button" onClick={printForm}>
                   พิมพ์
@@ -1166,6 +1181,9 @@ function App() {
                 </button>
                 <button type="button" className="secondary-button" onClick={saveCurrentRecord} disabled={isSaving}>
                   {isSaving ? 'กำลังบันทึก...' : 'บันทึกข้อมูล'}
+                </button>
+                <button type="button" className="secondary-button" onClick={downloadPdf}>
+                  Download PDF
                 </button>
                 <button type="button" className="primary-button" onClick={printForm}>
                   พิมพ์
