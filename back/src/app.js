@@ -3,12 +3,15 @@ import express from 'express'
 import { env } from './config/env.js'
 import { errorHandler } from './middleware/errorHandler.js'
 import { notFound } from './middleware/notFound.js'
+import { activityRouter } from './routes/activity.routes.js'
 import { patientRecordsRouter } from './routes/patientRecords.routes.js'
 import { checkDatabaseHealth } from './services/health.service.js'
 import { asyncHandler } from './utils/asyncHandler.js'
 
 export function createApp() {
   const app = express()
+
+  app.set('trust proxy', 1)
 
   app.use(
     cors({
@@ -33,6 +36,7 @@ export function createApp() {
     }),
   )
 
+  app.use('/api', activityRouter)
   app.use('/api/patient-records', patientRecordsRouter)
 
   app.use(notFound)

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import './App.css'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'
@@ -231,6 +231,73 @@ async function requestApi(path, options = {}) {
   }
 
   return response.json()
+}
+
+function getDeviceId() {
+  const storageKey = 'hos-admin-device-id'
+  const savedDeviceId = window.localStorage.getItem(storageKey)
+
+  if (savedDeviceId) {
+    return savedDeviceId
+  }
+
+  const nextDeviceId = window.crypto?.randomUUID?.() || `device-${Date.now()}-${Math.random().toString(16).slice(2)}`
+  window.localStorage.setItem(storageKey, nextDeviceId)
+  return nextDeviceId
+}
+
+function getBrowserName(userAgent) {
+  if (userAgent.includes('Edg/')) {
+    return 'Microsoft Edge'
+  }
+
+  if (userAgent.includes('Chrome/')) {
+    return 'Google Chrome'
+  }
+
+  if (userAgent.includes('Firefox/')) {
+    return 'Firefox'
+  }
+
+  if (userAgent.includes('Safari/') && !userAgent.includes('Chrome/')) {
+    return 'Safari'
+  }
+
+  return 'Unknown browser'
+}
+
+function getDeviceType() {
+  if (window.matchMedia('(max-width: 760px)').matches) {
+    return 'Phone'
+  }
+
+  if (window.matchMedia('(max-width: 1024px)').matches) {
+    return 'Tablet'
+  }
+
+  return 'Desktop'
+}
+
+function buildDevicePayload(action, page) {
+  const userAgent = window.navigator.userAgent
+
+  return {
+    action,
+    page,
+    deviceId: getDeviceId(),
+    deviceName: `${getDeviceType()} - ${getBrowserName(userAgent)}`,
+    deviceType: getDeviceType(),
+    browser: getBrowserName(userAgent),
+    platform: window.navigator.platform || 'Unknown platform',
+    screen: `${window.screen.width}x${window.screen.height}`,
+    language: window.navigator.language,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    userAgent,
+  }
+}
+
+function formatNumber(value) {
+  return new Intl.NumberFormat('th-TH').format(value || 0)
 }
 
 function TextInput({ label, name, value, onChange, unit = '', wide = false, placeholder = '' }) {
@@ -680,6 +747,110 @@ function RecordsView({ records, search, onSearch, onOpen, onDelete, onNew, isLoa
   )
 }
 
+function AdminView({ password, onPasswordChange, activity, summary, isLoading, error, onLoad }) {
+  return (
+    <section className="admin-panel">
+      <div className="records-head">
+        <div>
+          <p className="eyebrow">Admin Activity</p>
+          <h2>หลังบ้านการใช้งานเว็บ</h2>
+        </div>
+        <button type="button" className="secondary-button" onClick={onLoad} disabled={isLoading}>
+          {isLoading ? 'กำลังโหลด...' : 'โหลดข้อมูล'}
+        </button>
+      </div>
+
+      <div className="admin-login">
+        <label className="search-field">
+          <span>รหัสแอดมิน</span>
+          <input
+            type="password"
+            value={password}
+            onChange={(event) => onPasswordChange(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                onLoad()
+              }
+            }}
+            placeholder="ใส่รหัส ADMIN_PASSWORD"
+          />
+        </label>
+        <button type="button" className="primary-button" onClick={onLoad} disabled={isLoading}>
+          เข้าดูหลังบ้าน
+        </button>
+      </div>
+
+      {error && (
+        <div className="records-alert">
+          <strong>โหลดข้อมูลหลังบ้านไม่ได้</strong>
+          <p>{error}</p>
+        </div>
+      )}
+
+      <div className="admin-stats">
+        <div>
+          <span>อุปกรณ์ทั้งหมด</span>
+          <strong>{formatNumber(summary.devices)}</strong>
+        </div>
+        <div>
+          <span>ใช้งานวันนี้</span>
+          <strong>{formatNumber(summary.activeToday)}</strong>
+        </div>
+        <div>
+          <span>บันทึกข้อมูล</span>
+          <strong>{formatNumber(summary.saves)}</strong>
+        </div>
+        <div>
+          <span>พิมพ์ฟอร์ม</span>
+          <strong>{formatNumber(summary.prints)}</strong>
+        </div>
+      </div>
+
+      {activity.length === 0 ? (
+        <div className="empty-records">
+          <strong>ยังไม่มีข้อมูลอุปกรณ์</strong>
+          <p>เมื่อมีคนเปิดเว็บหรือใช้งานฟอร์ม ระบบจะเริ่มบันทึก activity ให้อัตโนมัติ</p>
+        </div>
+      ) : (
+        <div className="admin-table-wrap">
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th>อุปกรณ์</th>
+                <th>ระบบ</th>
+                <th>ล่าสุด</th>
+                <th>เปิด</th>
+                <th>บันทึก</th>
+                <th>พิมพ์</th>
+                <th>IP</th>
+              </tr>
+            </thead>
+            <tbody>
+              {activity.map((record) => (
+                <tr key={record.deviceId}>
+                  <td>
+                    <strong>{record.deviceName || 'Unknown device'}</strong>
+                    <span>{record.deviceId}</span>
+                  </td>
+                  <td>
+                    <strong>{record.browser || '-'}</strong>
+                    <span>{record.platform || '-'}</span>
+                  </td>
+                  <td>{formatSavedAt(record.lastSeenAt)}</td>
+                  <td>{formatNumber((record.viewCount || 0) + (record.recordsOpenCount || 0))}</td>
+                  <td>{formatNumber(record.saveCount)}</td>
+                  <td>{formatNumber(record.printCount)}</td>
+                  <td>{record.ipAddress || '-'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </section>
+  )
+}
+
 function App() {
   const [form, setForm] = useState(initialForm)
   const [checks, setChecks] = useState(initialChecks)
@@ -692,6 +863,11 @@ function App() {
   const [recordsError, setRecordsError] = useState('')
   const [isLoadingRecords, setIsLoadingRecords] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
+  const [adminPassword, setAdminPassword] = useState('')
+  const [adminActivity, setAdminActivity] = useState([])
+  const [adminSummary, setAdminSummary] = useState({ devices: 0, activeToday: 0, saves: 0, prints: 0 })
+  const [adminError, setAdminError] = useState('')
+  const [isLoadingAdmin, setIsLoadingAdmin] = useState(false)
 
   const checkedCount = useMemo(() => {
     return Object.values(checks).filter(Boolean).length
@@ -709,11 +885,48 @@ function App() {
     ].filter(Boolean).length
   }, [form])
 
+  const recommendedMode = useMemo(() => (detectPhoneLayout() ? 'phone' : 'desktop'), [])
+
+  const trackDeviceActivity = useCallback((action) => {
+    if (mode === 'admin' && action === 'page_view') {
+      return
+    }
+
+    requestApi('/api/activity', {
+      method: 'POST',
+      body: JSON.stringify(buildDevicePayload(action, mode)),
+    }).catch(() => {
+      // Activity logging should never interrupt clinical form work.
+    })
+  }, [mode])
+
   useEffect(() => {
     loadRecords()
   }, [])
 
-  const recommendedMode = useMemo(() => (detectPhoneLayout() ? 'phone' : 'desktop'), [])
+  useEffect(() => {
+    trackDeviceActivity(mode === 'records' ? 'record_list_view' : 'page_view')
+  }, [mode, trackDeviceActivity])
+
+  async function loadAdminActivity() {
+    setIsLoadingAdmin(true)
+    setAdminError('')
+
+    try {
+      const payload = await requestApi('/api/admin/activity', {
+        headers: {
+          'x-admin-password': adminPassword,
+        },
+      })
+
+      setAdminActivity(payload?.data || [])
+      setAdminSummary(payload?.summary || { devices: 0, activeToday: 0, saves: 0, prints: 0 })
+    } catch (error) {
+      setAdminError(error.message)
+    } finally {
+      setIsLoadingAdmin(false)
+    }
+  }
 
   function chooseDeviceMode(nextMode) {
     if (!PHONE_MODE_ENABLED && nextMode === 'phone') {
@@ -759,6 +972,7 @@ function App() {
   }
 
   function printForm() {
+    trackDeviceActivity('print_form')
     window.print()
   }
 
@@ -785,6 +999,7 @@ function App() {
       setRecords(nextRecords)
       setActiveRecordId(savedRecord.id)
       setSaveMessage(`บันทึกข้อมูล ${form.patientName || 'ผู้ป่วย'} แล้ว`)
+      trackDeviceActivity('record_save')
     } catch (error) {
       setSaveMessage(`บันทึกไม่สำเร็จ: ${error.message}`)
     } finally {
@@ -845,6 +1060,10 @@ function App() {
             <span>02</span>
             ข้อมูลผู้ป่วย
           </button>
+          <button type="button" className={mode === 'admin' ? 'active' : ''} onClick={() => setMode('admin')}>
+            <span>03</span>
+            หลังบ้าน
+          </button>
         </nav>
 
         {PHONE_MODE_ENABLED && (
@@ -885,6 +1104,10 @@ function App() {
               <button type="button" className="primary-button" onClick={resetForm}>
                 สร้างฟอร์มใหม่
               </button>
+            ) : mode === 'admin' ? (
+              <button type="button" className="primary-button" onClick={() => setMode('form')}>
+                กลับไปกรอกข้อมูล
+              </button>
             ) : (
               <>
                 {PHONE_MODE_ENABLED && (
@@ -906,7 +1129,17 @@ function App() {
           </div>
         </div>
 
-        {mode === 'records' ? (
+        {mode === 'admin' ? (
+          <AdminView
+            password={adminPassword}
+            onPasswordChange={setAdminPassword}
+            activity={adminActivity}
+            summary={adminSummary}
+            isLoading={isLoadingAdmin}
+            error={adminError}
+            onLoad={loadAdminActivity}
+          />
+        ) : mode === 'records' ? (
           <RecordsView
             records={records}
             search={recordSearch}

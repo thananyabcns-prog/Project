@@ -29,6 +29,8 @@ FRONTEND_ORIGIN=https://YOUR-FRONTEND-DOMAIN
 MONGODB_URI=YOUR_MONGODB_CONNECTION_STRING
 MONGODB_DB_NAME=hos
 MONGODB_COLLECTION=patient_records
+MONGODB_ACTIVITY_COLLECTION=admin_activity
+ADMIN_PASSWORD=YOUR_ADMIN_PASSWORD
 ```
 
 Use comma-separated origins if you need more than one frontend origin, for example:

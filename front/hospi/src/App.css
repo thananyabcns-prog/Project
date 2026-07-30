@@ -982,6 +982,102 @@ button:disabled {
   color: var(--text-muted);
 }
 
+.admin-panel {
+  display: grid;
+  gap: 14px;
+  width: min(100%, 1060px);
+  margin: 0 auto;
+}
+
+.admin-login {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.admin-stats div {
+  display: grid;
+  gap: 4px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.admin-stats span {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.admin-stats strong {
+  color: var(--text-strong);
+  font-size: 26px;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.admin-table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-size: 14px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.admin-table th {
+  color: var(--text-strong);
+  background: #f8fafc;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.admin-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.admin-table td strong,
+.admin-table td span {
+  display: block;
+}
+
+.admin-table td strong {
+  color: var(--text-strong);
+  font-weight: 800;
+}
+
+.admin-table td span {
+  max-width: 260px;
+  margin-top: 3px;
+  color: var(--text-muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
 .print-header {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 240px;
@@ -1738,6 +1834,10 @@ button:disabled {
   .record-actions {
     justify-content: flex-start;
   }
+
+  .admin-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media screen and (max-width: 850px) {
@@ -2044,6 +2144,15 @@ button:disabled {
   .form-footer {
     display: grid;
     grid-template-columns: 1fr;
+  }
+
+  .admin-login,
+  .admin-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-table {
+    min-width: 780px;
   }
 
   button {

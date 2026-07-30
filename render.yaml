@@ -20,3 +20,7 @@ services:
         value: hos
       - key: MONGODB_COLLECTION
         value: patient_records
+      - key: MONGODB_ACTIVITY_COLLECTION
+        value: admin_activity
+      - key: ADMIN_PASSWORD
+        sync: false
